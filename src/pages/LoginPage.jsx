@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
 
@@ -29,6 +30,8 @@ function LoginPage() {
           <button className="bg-white text-black font-semibold rounded-full w-full py-3 hover:bg-gray-300 transition duration-300">
             Login
           </button>
+
+          <p className="text-[13px] mt-[-15px] mb-[-20px] cursor-default">Don't have an account? <Link to="/signup">Sign up</Link></p>
         </div>
       </div>
     </div>
