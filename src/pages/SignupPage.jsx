@@ -69,7 +69,7 @@ function SignupPage() {
             Sign Up
           </button>
 
-          <p className="text-[13px] mt-[-5px] mb-[-5px] cursor-default">Already have an account? <Link to="/login">Log in Now</Link></p>
+          <p className="text-[13px] mt-[-5px] mb-[-5px] cursor-default">Already have an account? <Link to="/login" className="underline">Log in Now</Link></p>
         </div>
       </div>
     </div>
