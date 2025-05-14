@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
-import ProductsPage from './admin/ProductsPage'
-import UsersPage from './admin/UsersPage'
-import OrdersPage from './admin/OrdersPage'
-import ReviewPage from './admin/ReviewPage'
+import AdminProductsPage from './admin/AdminProductsPage'
+import AdminUsersPage from './admin/AdminUsersPage'
+import AdminOrdersPage from './admin/AdminOrdersPage'
+import AdminReviewPage from './admin/AdminReviewPage'
 
 function AdminPage() {
   return (
@@ -16,10 +16,10 @@ function AdminPage() {
         </div>
         <div className='w-[calc(100%-300px)] h-full bg-amber-200'>
             <Routes path="/*">
-                <Route path='/products' element={<ProductsPage/>}/>
-                <Route path='/users' element={<UsersPage/>}/>
-                <Route path='/orders' element={<OrdersPage/>}/>
-                <Route path='/reviews' element={<ReviewPage/>}/>
+                <Route path='/products' element={<AdminProductsPage/>}/>
+                <Route path='/users' element={<AdminUsersPage/>}/>
+                <Route path='/orders' element={<AdminOrdersPage/>}/>
+                <Route path='/reviews' element={<AdminReviewPage/>}/>
             </Routes>
         </div>
     </div>
