@@ -2,13 +2,19 @@ import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import mediaUpload from "../utils/mediaUpload";
 
 function SignupPage() {
   const navigate = useNavigate();
+  const [imagePreview, setImagePreview] = useState("https://avatar.iran.liara.run/public/boy?username=Ash");
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [image, setImage] = useState("https://avatar.iran.liara.run/public/boy?username=Ash");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [imagePreview, setImagePreview] = useState(
-    "https://avatar.iran.liara.run/public/boy?username=Ash"
-  );
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -19,15 +25,21 @@ function SignupPage() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setSelectedImageFile(file)
       setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  async function fileUpload() {
+    try {
+      const res = await mediaUpload(selectedImageFile);
+      return res;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+  
 
   async function handleLogin() {
     try {
@@ -36,9 +48,21 @@ function SignupPage() {
         return;
       }
 
+      let imageUrl = image;
+
+      if (selectedImageFile) {
+        try {
+          imageUrl = await fileUpload(); // ✅ wait for upload
+        } catch (uploadError) {
+          toast.error("Image upload failed");
+          return;
+        }
+      }
+
       const response = await axios.post(
         import.meta.env.VITE_BACKEND_URL + "/api/users/signup",
         {
+          image: imageUrl,
           firstName: firstName,
           lastName: lastName,
           email: email,
