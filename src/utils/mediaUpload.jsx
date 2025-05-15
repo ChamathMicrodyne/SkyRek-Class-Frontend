@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_KEY)
 
 export default function mediaUpload(file) {
-    const mediaUploadPromise = new Promise((resolve, reject) => {
+    const mediaUpload = new Promise((resolve, reject) => {
         if (file == null) {
             reject("No file selected")
             return
@@ -23,6 +23,6 @@ export default function mediaUpload(file) {
             })
     })
 
-    return mediaUploadPromise
+    return mediaUpload
 }
 

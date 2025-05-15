@@ -10,7 +10,7 @@ function AdminProductsPage() {
     axios
       .get(import.meta.env.VITE_BACKEND_URL + "/api/products")
       .then((res) => {
-        console.log(res.data);
+        setProducts(res.data)
       });
   }, []);
 
@@ -35,7 +35,7 @@ function AdminProductsPage() {
                   <td>{item.productId}</td>
                   <td>{item.name}</td>
                   <td>
-                    <img src={item.images} className="w-[50px] h-[50px]" />
+                    <img src={item.images[0]} className="w-[50px] h-[50px]" />
                   </td>
                   <td>{item.labelledPrice}</td>
                   <td>{item.price}</td>
