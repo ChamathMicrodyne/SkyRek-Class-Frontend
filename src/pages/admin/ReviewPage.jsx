@@ -1,9 +1,9 @@
 import React from 'react'
 
-function AdminReviewPage() {
+function ReviewPage() {
   return (
     <div>ReviewPage</div>
   )
 }
 
-export default AdminReviewPage
+export default ReviewPage

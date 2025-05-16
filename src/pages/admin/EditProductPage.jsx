@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import mediaUpload from "../../utils/mediaUpload";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function AddProductPage() {
-  const [productId, setProductId] = useState("");
-  const [name, setName] = useState("");
-  const [altNames, setAltNames] = useState("");
-  const [description, setDescription] = useState("");
+export default function EditProductPage() {
+  const location = useLocation();
+  const [productId, setProductId] = useState(location.state.productId);
+  const [name, setName] = useState(location.state.name);
+  const [altNames, setAltNames] = useState(location.state.altNames.join(","));
+  const [description, setDescription] = useState(location.state.description);
   const [images, setImages] = useState([]);
-  const [previewURLs, setPreviewURLs] = useState([]);
-  const [labelledPrice, setLabelledPrice] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
+  const [imagePreviewURLs, setImagePreviewURLs] = useState([]);
+  const [labelledPrice, setLabelledPrice] = useState(location.state.labelledPrice);
+  const [price, setPrice] = useState(location.state.price);
+  const [stock, setStock] = useState(location.state.stock);
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
@@ -21,27 +22,27 @@ export default function AddProductPage() {
     setImages(files);
 
     const fileURLs = files.map((file) => URL.createObjectURL(file));
-    setPreviewURLs(fileURLs);
+    setImagePreviewURLs(fileURLs);
   };
 
-  async function addProduct() {
+  async function UpdateProduct() {
     const token = localStorage.getItem("token");
     if (token == null) {
       toast.error("Please login first");
       return;
     }
-    if (images.length <= 0) {
-      toast.error("Please select at least one image");
-      return;
-    }
 
+    let imageUrls = location.state.images;
     const promisesArray = [];
 
     for (let i = 0; i < images.length; i++) {
       promisesArray[i] = mediaUpload(images[i]);
     }
     try {
-      const imageUrls = await Promise.all(promisesArray);
+      if (images.length > 0) {
+        imageUrls = await Promise.all(promisesArray);
+      }
+
       const altNamesArrays = altNames.split(",");
       const product = {
         productId: productId,
@@ -54,12 +55,12 @@ export default function AddProductPage() {
         stock: stock,
       };
 
-      axios.post(import.meta.env.VITE_BACKEND_URL + "/api/products", product, {
+      axios.put(import.meta.env.VITE_BACKEND_URL + "/api/products/" + productId, product, {
         headers : {
           "Authorization" : "Bearer " + token
         }
       }).then(() => {
-        toast.success("Product add successfully")
+        toast.success("Product updated successfully")
         navigate("/admin/products")
       }).catch((e) => {
         toast.error(e.response.data.message)
@@ -73,7 +74,7 @@ export default function AddProductPage() {
     <div className="w-full h-full max-h-full p-5 bg-[#f4f4f5]">
       <div className="w-full h-full max-h-full bg-white rounded-xl p-6 shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-gray-800">
-          Add New Product
+          Edit Product
         </h2>
         {/* Basic Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -83,6 +84,7 @@ export default function AddProductPage() {
             </label>
             <input
               type="text"
+              disabled
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -183,12 +185,12 @@ export default function AddProductPage() {
             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
 
-          {previewURLs.length > 0 && (
+          {imagePreviewURLs.length > 0 && (
             <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {previewURLs.map((url, index) => (
+              {imagePreviewURLs.map((imageUrl, index) => (
                 <div key={index} className="relative">
                   <img
-                    src={url}
+                    src={imageUrl}
                     alt={`Preview ${index + 1}`}
                     className="w-full h-50 object-cover rounded-lg border"
                   />
@@ -203,9 +205,9 @@ export default function AddProductPage() {
           <button
             type="submit"
             className="w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-medium"
-            onClick={addProduct}
+            onClick={UpdateProduct}
           >
-            Add Product
+            Update Product
           </button>
         </div>
       </div>
