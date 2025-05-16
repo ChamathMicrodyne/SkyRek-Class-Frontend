@@ -10,13 +10,11 @@ function App() {
     <BrowserRouter>
       <div>
         <Toaster position="top-right"/>
-        {/* <Header/> */}
         <Routes path="/*">
-          <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/signup" element={<SignupPage/>}/>
           <Route path="/admin/*" element={<AdminPage/>}/>
-          <Route path="/*" element={<h2>404 Not Found!</h2>}/>
+          <Route path="/*" element={<HomePage/>}/>
         </Routes>
       </div>
     </BrowserRouter>
