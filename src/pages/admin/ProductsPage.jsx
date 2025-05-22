@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
+import LoadingAnimation from "../../components/LoadingAnimation.jsx";
 
 function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -46,10 +47,7 @@ function ProductsPage() {
   return (
     <div className="w-full h-full max-h-full p-5 bg-[#f4f4f5]">
       <div className="w-full h-full max-h-full bg-white rounded-xl p-6 shadow-lg">
-        {isLoading ?
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="w-[60px] h-[60px] border-[5px] border-gray-200 border-t-blue-400 rounded-full animate-spin"></div>
-          </div> 
+        {isLoading ? <LoadingAnimation/>
           :
           <table className="w-full text-center">
             <thead>

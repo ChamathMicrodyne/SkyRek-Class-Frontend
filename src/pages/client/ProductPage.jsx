@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard";
+import LoadingAnimation from "../../components/LoadingAnimation";
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -19,11 +20,7 @@ function ProductPage() {
 
   return (
     <div className="w-full h-full flex flex-wrap justify-center items-center ">
-        { isLoading ?
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="w-[60px] h-[60px] border-[5px] border-gray-200 border-t-blue-400 rounded-full animate-spin"></div>
-          </div> 
-          :
+        { isLoading ? <LoadingAnimation/> :
             products.map((product) => {
                 return (
                     <ProductCard key={product.productId} product={product}/>

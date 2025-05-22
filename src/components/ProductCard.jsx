@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function ProductCard({ product }) {
   const isDiscounted = product.labelledPrice > product.price;
 
   return (
-    <div className="w-[300px] bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg cursor-default m-2">
+    <Link to={"/overview/" + product.productId} className="w-[300px] bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg cursor-default m-2 cursor-pointer">
       <img
         src={product.images[0] || 'https://via.placeholder.com/300x200'}
         alt={product.name}
@@ -31,12 +32,12 @@ function ProductCard({ product }) {
           <span className={`text-sm font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-500'}`}>
             {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
           </span>
-          <button className="px-4 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition cursor-pointer">
+          <button className="px-4 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition">
             Buy Now
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
