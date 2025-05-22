@@ -5,7 +5,7 @@ function ProductCard({ product }) {
   const isDiscounted = product.labelledPrice > product.price;
 
   return (
-    <Link to={"/overview/" + product.productId} className="w-[300px] bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg cursor-default m-2 cursor-pointer">
+    <Link to={"/overview/" + product.productId} className="w-[300px] bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg m-2 cursor-pointer">
       <img
         src={product.images[0] || 'https://via.placeholder.com/300x200'}
         alt={product.name}
