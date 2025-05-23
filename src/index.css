@@ -5,3 +5,14 @@
     --color-secondary: #393E46 ;
     --color-accent: #EC7FA9;
 }
+
+/* Tailwind-compatible custom class */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+

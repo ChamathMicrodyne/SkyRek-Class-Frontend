@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import LoadingAnimation from "../../components/LoadingAnimation";
+import { addToCart, getCart } from "../../utils/cart";
 
 function ProductOverviewPage() {
   const params = useParams();
@@ -32,7 +33,7 @@ function ProductOverviewPage() {
             {/* Left Image Section */}
             <div className="w-full md:w-1/2 flex gap-4">
               {/* Vertical Thumbnails */}
-              <div className="flex flex-col gap-2 items-center justify-center">
+              <div className="flex flex-col gap-2 items-center justify-center overflow-hidden overflow-y-scroll hide-scrollbar h-125 px-1">
                 {product.images.map((img, index) => (
                   <img
                     key={index}
@@ -78,18 +79,22 @@ function ProductOverviewPage() {
               {/* Price Display */}
               <div className="flex items-center gap-4 mt-2">
                 <p className="text-2xl font-bold text-red-600">
-                  ${product.price}
+                  Rs. {product.price.toFixed(2)}
                 </p>
                 {product.labelledPrice > product.price && (
                   <p className="text-lg line-through text-gray-500">
-                    ${product.labelledPrice}
+                    Rs. {product.labelledPrice.toFixed(2)}
                   </p>
                 )}
               </div>
 
               {/* Action Buttons */}
               <div className="flex gap-4 mt-6">
-                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md cursor-pointer">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md cursor-pointer" onClick={() => {
+                  console.log(getCart())
+                  addToCart(product,1)
+                  console.log(getCart())
+                }}>
                   ADD TO CART
                 </button>
                 <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md cursor-pointer">
