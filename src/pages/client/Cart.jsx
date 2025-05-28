@@ -6,15 +6,25 @@ import {
   getTotal,
 } from "../../utils/cart.js";
 import { BiMinus, BiPlus, BiTrash } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const [cart, setCart] = useState(getCart());
   const [showConfirm, setShowConfirm] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]); // ✅ Track selected items
+
+  const handleCheckboxChange = (productId) => {
+    setSelectedItems((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
 
   return (
     <div className="max-h-screen p-6">
-      <div className="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <div className="w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
 
         {cart.length === 0 ? (
@@ -26,6 +36,14 @@ const Cart = () => {
                 key={item.productId}
                 className="flex items-center justify-between bg-gray-50 p-4 rounded-md shadow-sm"
               >
+                {/* ✅ Checkbox */}
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item.productId)}
+                  onChange={() => handleCheckboxChange(item.productId)}
+                  className="w-5 h-5 text-indigo-600 border-gray-300 rounded mr-4"
+                />
+
                 {/* Image */}
                 <img
                   src={item.images}
@@ -97,13 +115,25 @@ const Cart = () => {
               <h2 className="text-xl font-bold mr-6">
                 Total: Rs. {getTotal().toFixed(2)}
               </h2>
-              <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+
+              {/* ✅ Pass selected items to checkout */}
+              <Link
+                to="/checkout"
+                state={{
+                  items: cart.filter((item) =>
+                    selectedItems.includes(item.productId)
+                  ),
+                }}
+                className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+              >
                 Checkout
-              </button>
+              </Link>
             </div>
           </div>
         )}
       </div>
+
+      {/* Confirm Remove Modal */}
       {showConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center w-80">
