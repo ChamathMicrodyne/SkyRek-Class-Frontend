@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BsCart3 } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
@@ -31,7 +32,7 @@ function Header() {
             <Link
               to={item.path}
               className={`text-[20px] font-bold transition-colors duration-300 ${
-                active === item.id ? "text-black" : "text-gray-800"
+                active === item.id ? "text-black" : "text-gray-600"
               }`}
             >
               {item.name}
@@ -44,7 +45,15 @@ function Header() {
           </div>
         ))}
       </div>
-      <div className="w-[80px] h-full bg-green-400"></div>
+      <div className="w-[80px] h-full flex justify-center items-center">
+        <Link
+          to="/cart"
+          className="text-[20px] font-bold mx-2"
+          onClick={() => setActive(null)}
+        >
+          <BsCart3 />
+        </Link>
+      </div>
     </header>
   );
 }

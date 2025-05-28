@@ -1,27 +1,19 @@
-import { useEffect, useState } from "react";
-import { getCart, addToCart, removeFromCart } from "../../utils/cart.js";
-import { BiTrash } from "react-icons/bi";
+import { useState } from "react";
+import {
+  getCart,
+  addToCart,
+  removeFromCart,
+  getTotal,
+} from "../../utils/cart.js";
+import { BiMinus, BiPlus, BiTrash } from "react-icons/bi";
 
 const Cart = () => {
   const [cart, setCart] = useState(getCart());
   const [showConfirm, setShowConfirm] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
 
-  const handleQuantityChange = (product, delta) => {
-    addToCart(product, delta);
-    setCart(getCart());
-  };
-
-  const handleRemove = (productId) => {
-    removeFromCart(productId);
-    setCart(getCart());
-  };
-
-  const calculateTotal = () =>
-    cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-
   return (
-    <div className="min-h-screen p-6">
+    <div className="max-h-screen p-6">
       <div className="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
 
@@ -58,21 +50,27 @@ const Cart = () => {
                 </div>
 
                 {/* Quantity Controls */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                   <button
-                    onClick={() =>
-                      item.qty > 1 && handleQuantityChange(item, -1)
-                    }
-                    className="w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer"
+                    onClick={() => {
+                      if (item.qty > 1) {
+                        addToCart(item, -1);
+                        setCart(getCart());
+                      }
+                    }}
+                    className="w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer flex items-center justify-center"
                   >
-                    −
+                    <BiMinus />
                   </button>
                   <span className="w-6 text-center">{item.qty}</span>
                   <button
-                    onClick={() => handleQuantityChange(item, 1)}
-                    className="w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer"
+                    onClick={() => {
+                      addToCart(item, 1);
+                      setCart(getCart());
+                    }}
+                    className="w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer flex items-center justify-center"
                   >
-                    +
+                    <BiPlus />
                   </button>
                 </div>
 
@@ -84,7 +82,7 @@ const Cart = () => {
                 {/* Remove */}
                 <button
                   onClick={() => {
-                    setItemToRemove(item.productId);
+                    setItemToRemove(item);
                     setShowConfirm(true);
                   }}
                   className="text-red-500 hover:text-red-700 text-xl ml-4 cursor-pointer"
@@ -97,7 +95,7 @@ const Cart = () => {
             {/* Cart Total */}
             <div className="flex justify-end items-center mt-8">
               <h2 className="text-xl font-bold mr-6">
-                Total: Rs. {calculateTotal().toFixed(2)}
+                Total: Rs. {getTotal().toFixed(2)}
               </h2>
               <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
                 Checkout
@@ -117,7 +115,8 @@ const Cart = () => {
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => {
-                  handleRemove(itemToRemove.productId);
+                  removeFromCart(itemToRemove.productId);
+                  setCart(getCart());
                   setShowConfirm(false);
                   setItemToRemove(null);
                 }}

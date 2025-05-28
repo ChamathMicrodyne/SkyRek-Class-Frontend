@@ -28,7 +28,7 @@ function ProductOverviewPage() {
   return (
     <>
       {status === "Success" && (
-        <div className="w-full min-h-screen bg-primary flex justify-center items-start py-10 px-4">
+        <div className="w-full max-h-screen bg-primary flex justify-center items-start py-10 px-4">
           <div className="bg-white w-full max-w-6xl rounded shadow-md p-6 md:p-10 flex flex-col md:flex-row gap-10">
             {/* Left Image Section */}
             <div className="w-full md:w-1/2 flex gap-4">
@@ -64,11 +64,13 @@ function ProductOverviewPage() {
               {/* Product Title */}
               <h1 className="text-2xl font-semibold text-gray-800">
                 {product.name}
-                {product.altNames.map((alt, i) => {
+                {product.altNames.map((alt, i) => (
                   <span key={i} className="text-lg text-gray-500">
                     {" | " + alt}
                   </span>
-                })}
+
+                  
+                ))}
               </h1>
 
               {/* Description */}
