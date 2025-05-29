@@ -6,20 +6,27 @@ import {
   getTotal,
 } from "../../utils/cart.js";
 import { BiMinus, BiPlus, BiTrash } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useState(getCart());
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [itemToRemove, setItemToRemove] = useState(null);
-  const [selectedItems, setSelectedItems] = useState([]); // ✅ Track selected items
+  const [showConfirm, setShowConfirm] = useState(false); // Show Popup message to confirm Delete
+  const [itemToRemove, setItemToRemove] = useState(null); // Delete item
+  const [selectedItems, setSelectedItems] = useState([]); // Track selected items
 
   const handleCheckboxChange = (productId) => {
-    setSelectedItems((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
+    setSelectedItems((prevSelectedItems) => {
+      const isAlreadySelected = prevSelectedItems.includes(productId);
+
+      if (isAlreadySelected) {
+        // Remove item if already selected
+        return prevSelectedItems.filter((id) => id !== productId);
+      } else {
+        // Add item if not selected
+        return [...prevSelectedItems, productId];
+      }
+    });
   };
 
   return (
@@ -117,17 +124,28 @@ const Cart = () => {
               </h2>
 
               {/* ✅ Pass selected items to checkout */}
-              <Link
-                to="/checkout"
-                state={{
-                  items: cart.filter((item) =>
-                    selectedItems.includes(item.productId)
-                  ),
+              <button
+                onClick={() => {
+                  if (selectedItems.length === 0) {
+                    navigate("/checkout", {
+                      state: {
+                        items: cart
+                      },
+                    });
+                  } else {
+                    navigate("/checkout", {
+                      state: {
+                        items: cart.filter((item) =>
+                          selectedItems.includes(item.productId)
+                        ),
+                      },
+                    });
+                  }
                 }}
                 className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
               >
                 Checkout
-              </Link>
+              </button>
             </div>
           </div>
         )}

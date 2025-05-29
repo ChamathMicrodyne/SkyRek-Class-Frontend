@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState(null);
 
   return (
     <header className="w-full h-[80px] shadow-2xl flex">

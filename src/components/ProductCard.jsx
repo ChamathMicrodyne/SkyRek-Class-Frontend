@@ -41,9 +41,6 @@ function ProductCard({ product }) {
           >
             {product.stock > 0 ? "In Stock" : "Out of Stock"}
           </span>
-          <button className="px-4 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition">
-            Buy Now
-          </button>
         </div>
       </div>
     </Link>

@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoadingAnimation from "../../components/LoadingAnimation";
 import { addToCart, getCart } from "../../utils/cart";
 
 function ProductOverviewPage() {
+  const navigate = useNavigate();
   const params = useParams();
   const productId = params.id;
   const [status, setStatus] = useState("Loading"); //Loading, Success, Error
@@ -68,8 +69,6 @@ function ProductOverviewPage() {
                   <span key={i} className="text-lg text-gray-500">
                     {" | " + alt}
                   </span>
-
-                  
                 ))}
               </h1>
 
@@ -92,14 +91,33 @@ function ProductOverviewPage() {
 
               {/* Action Buttons */}
               <div className="flex gap-4 mt-6">
-                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md cursor-pointer" onClick={() => {
-                  console.log(getCart())
-                  addToCart(product,1)
-                  console.log(getCart())
-                }}>
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md cursor-pointer"
+                  onClick={() => {
+                    addToCart(product, 1);
+                  }}
+                >
                   ADD TO CART
                 </button>
-                <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md cursor-pointer">
+                <button
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md cursor-pointer"
+                  onClick={() => {
+                    navigate("/checkout", {
+                      state: {
+                        items: [
+                          {
+                            productId: product.productId,
+                            name: product.name,
+                            images: product.images[0],
+                            price: product.price,
+                            labelledPrice: product.labelledPrice,
+                            qty: 1,
+                          },
+                        ],
+                      },
+                    });
+                  }}
+                >
                   BUY NOW
                 </button>
               </div>
