@@ -4,6 +4,8 @@
     --color-primary: #FBFBFB;
     --color-secondary: #393E46 ;
     --color-accent: #EC7FA9;
+    --color-admin-accent: #0d542b;
+    --color-admin-secondary: #dbfce7;
 }
 
 /* Tailwind-compatible custom class */
