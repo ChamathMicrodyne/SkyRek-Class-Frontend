@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { BiMinus, BiPlus, BiTrash } from "react-icons/bi";
 import { Link, useLocation } from "react-router-dom";
 
@@ -7,45 +9,110 @@ const Checkout = () => {
   const [cart, setCart] = useState(location.state?.items || []);
   const [showConfirm, setShowConfirm] = useState(false); // Show Popup message to confirm Delete
   const [itemToRemove, setItemToRemove] = useState(null); // Delete item
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
-  function getTotal(){
-    let total = 0
+  function getTotal() {
+    let total = 0;
     cart.forEach((item) => {
-      total += item.price * item.qty
-    })
-    return total
+      total += item.price * item.qty;
+    });
+    return total;
   }
 
-  function removeFromCart(index){
-    const newCart = cart.filter((item, i) => i !== index)
-    setCart(newCart)
+  function removeFromCart(index) {
+    const newCart = cart.filter((item, i) => i !== index);
+    setCart(newCart);
   }
 
-  function changeQty(index, qty){
-    const newQty = cart[index].qty + qty
-    if(newQty <= 0){
-      return
+  function changeQty(index, qty) {
+    const newQty = cart[index].qty + qty;
+    if (newQty <= 0) {
+      return;
     } else {
-      const newCart = [...cart]
-      newCart[index].qty = newQty
-      setCart(newCart)
+      const newCart = [...cart];
+      newCart[index].qty = newQty;
+      setCart(newCart);
+    }
+  }
+
+  async function placeOrder() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to place order");
+      return;
+    }
+
+    const orderInfomation = {
+      products: [],
+      phone: phone,
+      address: address,
+    };
+
+    for (let i = 0; i < cart.length; i++) {
+      const item = {
+        productId: cart[i].productId,
+        quantity: cart[i].qty,
+      };
+      orderInfomation.products[i] = item;
+    }
+
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/orders",
+        orderInfomation,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      toast.success("Order placed successfully");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error placing order");
+      return;
     }
   }
 
   return (
     <div className="max-h-screen w-full p-6 relative ">
-      <div className="w-[400px] h-[80px] shadow-2xl absolute bg-white mt-5 rounded-lg top-1 right-1 flex flex-col justify-center items-center">
+      <div className="w-[400px] h-auto shadow-2xl absolute bg-white mt-5 rounded-lg top-1 right-1 flex flex-col justify-center items-center p-4 space-y-4">
         <p className="text-2xl text-secondary font-bold">
-          
-          Total: {" "}
-          <span className="text-2xl text-secondary font-bold">{ getTotal().toFixed(2)}</span>
+          Total:{" "}
+          <span className="text-2xl text-secondary font-bold">
+            {getTotal().toFixed(2)}
+          </span>
         </p>
+
+        {/* Phone Input */}
+        <input
+          type="text"
+          placeholder="Phone number"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+
+        {/* Address Input */}
+        <textarea
+          placeholder="Delivery address"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+          rows={2}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+
         <button
-          className="text-white bg-green-600 px-4 py-2 rounded-lg font-bold hover:bg-green-700 transition-all duration-300"
+          className="text-white bg-green-600 px-4 py-2 rounded-lg font-bold hover:bg-green-700 transition-all duration-300 w-full"
+          onClick={() => {
+            placeOrder();
+          }}
         >
           Place Order
         </button>
       </div>
+
       <div className="w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
@@ -87,7 +154,7 @@ const Checkout = () => {
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => {
-                      changeQty(index, -1)
+                      changeQty(index, -1);
                     }}
                     className="w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer flex items-center justify-center"
                   >
@@ -96,7 +163,7 @@ const Checkout = () => {
                   <span className="w-6 text-center">{item.qty}</span>
                   <button
                     onClick={() => {
-                        changeQty(index, 1)
+                      changeQty(index, 1);
                     }}
                     className="w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer flex items-center justify-center"
                   >

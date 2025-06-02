@@ -6,16 +6,12 @@ import OrdersPage from './admin/OrdersPage'
 import ReviewPage from './admin/ReviewPage'
 import AddProductPage from './admin/AddProductPage'
 import EditProductPage from './admin/EditProductPage'
+import AdminSidebar from '../components/AdminSideBar'
 
 function AdminPage() {
   return (
     <div className='w-full h-screen flex'>
-        <div className='w-[300px] h-full bg-green-200 flex flex-col'>
-            <Link to="/admin/products">Products</Link>
-            <Link to="/admin/users">Users</Link>
-            <Link to="/admin/orders">Orders</Link>
-            <Link to="/admin/reviews">Reviews</Link>
-        </div>
+        <AdminSidebar />
         <div className='w-[calc(100%-300px)] h-full '>
             <Routes path="/*">
                 <Route path='/products' element={<ProductsPage/>}/>
