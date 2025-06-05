@@ -34,7 +34,7 @@ function OrdersPage() {
         toast.error("Failed to fetch orders");
         setIsLoading(false);
       });
-  }, []);
+  }, [isLoading]);
 
   return (
     <div className="w-full h-full p-6 bg-[#f4f4f5]">
@@ -76,15 +76,47 @@ function OrdersPage() {
                         <strong>Status:</strong>{" "}
                         <span
                           className={`font-semibold ${
-                            activeOrder.status === "Delivered"
-                              ? "text-green-600"
-                              : activeOrder.status === "Pending"
-                              ? "text-yellow-500"
-                              : "text-red-500"
+                            activeOrder.status === "Complete" ? "text-green-600" :
+                            activeOrder.status === "Pending" ? "text-yellow-500" : "text-red-500"
                           }`}
                         >
                           {activeOrder.status.toUpperCase()}
                         </span>
+                        <select value="Change status"
+                          onChange={async (e) => {
+                            const updatedValue = e.target.value;
+                            try {
+                              const token = localStorage.getItem("token");
+                              await axios.put(
+                                import.meta.env.VITE_BACKEND_URL +
+                                  "/api/orders/" +
+                                  activeOrder.orderId +
+                                  "/" +
+                                  updatedValue,
+                                {},
+                                {
+                                  headers: {
+                                    Authorization: `Bearer ${token}`,
+                                  },
+                                }
+                              );
+                              setIsLoading(true);
+                              const updatedOrder = {...activeOrder};
+                              updatedOrder.status = updatedValue
+                              setActiveOrder(updatedOrder)
+                            } catch (err) {
+                              toast.error("Error updating status");
+                            }
+                          }}
+                        >
+                          <option disabled>
+                            Change status
+                          </option>
+                          <option value="Pending">Pending</option>
+                          <option value="Complete">Complete</option>
+                          <option value="Cancelled">Cancelled</option>
+                          <option value="Returned">Returned</option>
+                        </select>
                       </p>
                       <p>
                         <strong>Date:</strong>{" "}
@@ -113,9 +145,7 @@ function OrdersPage() {
                   <table className="w-full text-sm mb-6">
                     <thead className="bg-admin-secondary text-admin-accent rounded overflow-hidden">
                       <tr>
-                        <th className="text-left py-2 px-2 rounded-tl">
-                          No
-                        </th>
+                        <th className="text-left py-2 px-2 rounded-tl">No</th>
                         <th className="text-left py-2 px-3 rounded-tl">
                           Image
                         </th>
@@ -129,10 +159,7 @@ function OrdersPage() {
                     </thead>
                     <tbody className="bg-white">
                       {activeOrder.products.map((item, idx) => (
-                        <tr
-                          key={idx}
-                          className=" hover:bg-gray-50"
-                        >
+                        <tr key={idx} className=" hover:bg-gray-50">
                           <td className="py-3 px-3">{idx + 1}.</td>
                           <td className="py-3 px-3">
                             <img
@@ -212,7 +239,7 @@ function OrdersPage() {
                       <td className="py-2">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            order.status === "Delivered"
+                            order.status === "Complete"
                               ? "bg-green-200 text-green-800"
                               : order.status === "Pending"
                               ? "bg-yellow-200 text-yellow-800"

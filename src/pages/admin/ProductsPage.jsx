@@ -3,8 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
-import LoadingAnimation from "../../components/LoadingAnimation.jsx"; 
-
+import LoadingAnimation from "../../components/LoadingAnimation.jsx";
 
 function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -12,6 +11,12 @@ function ProductsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login first");
+      return;
+    }
+    
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/api/products`)
       .then((res) => {
@@ -39,7 +44,7 @@ function ProductsPage() {
       })
       .then(() => {
         toast.success("Product deleted successfully");
-        setProducts(products.filter(p => p.productId !== productId));
+        setProducts(products.filter((p) => p.productId !== productId));
       })
       .catch((e) => {
         toast.error(e.response?.data?.message || "Failed to delete product");
@@ -68,7 +73,10 @@ function ProductsPage() {
                 </thead>
                 <tbody className="text-gray-700">
                   {products.map((product) => (
-                    <tr key={product.productId} className="hover:bg-gray-100 transition" >
+                    <tr
+                      key={product.productId}
+                      className="hover:bg-gray-100 transition"
+                    >
                       <td className="py-2">{product.productId}</td>
                       <td className="py-2">{product.name}</td>
                       <td className="py-2">
@@ -84,7 +92,11 @@ function ProductsPage() {
                       <td className="py-2">
                         <div className="flex justify-center gap-3">
                           <button
-                            onClick={() => navigate("/admin/edit-product", { state: product })}
+                            onClick={() =>
+                              navigate("/admin/edit-product", {
+                                state: product,
+                              })
+                            }
                             className="text-blue-600 hover:text-blue-800"
                             aria-label="Edit"
                           >
