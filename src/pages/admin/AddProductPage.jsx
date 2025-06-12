@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import mediaUpload from "../../utils/mediaUpload";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { mediaUploadProducts } from "../../utils/mediaUpload";
 
 export default function AddProductPage() {
   const [productId, setProductId] = useState("");
@@ -38,7 +38,7 @@ export default function AddProductPage() {
     const promisesArray = [];
 
     for (let i = 0; i < images.length; i++) {
-      promisesArray[i] = mediaUpload(images[i]);
+      promisesArray[i] = mediaUploadProducts(images[i]);
     }
     try {
       const imageUrls = await Promise.all(promisesArray);

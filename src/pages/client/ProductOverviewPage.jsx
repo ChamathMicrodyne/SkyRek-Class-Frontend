@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingAnimation from "../../components/LoadingAnimation";
-import { addToCart, getCart } from "../../utils/cart";
+import { addToCart } from "../../utils/cart";
 
 function ProductOverviewPage() {
   const navigate = useNavigate();
   const params = useParams();
   const productId = params.id;
-  const [status, setStatus] = useState("Loading"); //Loading, Success, Error
+  const [status, setStatus] = useState("Loading");
   const [product, setProduct] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -29,41 +29,45 @@ function ProductOverviewPage() {
   return (
     <>
       {status === "Success" && (
-        <div className="w-full max-h-screen bg-primary flex justify-center items-start py-10 px-4">
-          <div className="bg-white w-full max-w-6xl rounded shadow-md p-6 md:p-10 flex flex-col md:flex-row gap-10">
-            {/* Left Image Section */}
-            <div className="w-full md:w-1/2 flex gap-4">
-              {/* Vertical Thumbnails */}
-              <div className="flex flex-col gap-2 items-center justify-center overflow-hidden overflow-y-scroll hide-scrollbar h-125 px-1">
-                {product.images.map((img, index) => (
-                  <img
-                    key={index}
-                    src={img}
-                    className={
-                      "w-fit h-16 object-contain rounded cursor-pointer hover:ring-2 hover:ring-accent " +
-                      (index == currentIndex && "border-accent border-2")
-                    }
-                    onClick={() => {
-                      setCurrentIndex(index);
-                    }}
-                  />
-                ))}
-              </div>
-
+        <div className="w-full min-h-screen bg-primary flex justify-center items-start py-6 px-3">
+          <div className="bg-white w-full max-w-6xl rounded shadow-md p-4 sm:p-6 md:p-10 flex flex-col md:flex-row gap-6 md:gap-10">
+            {/* Left Section - Product Images */}
+            <div className="w-full md:w-1/2 flex flex-col items-center gap-4">
               {/* Main Image */}
-              <div className="flex-1 rounded-md">
+              <div className="w-full flex justify-center items-center rounded-md overflow-hidden bg-gray-50 border border-gray-200 p-4">
                 <img
                   src={product.images[currentIndex]}
                   alt="main-product"
-                  className="w-fit h-[500px] object-contain rounded-md"
+                  className="max-h-[400px] w-auto object-contain"
                 />
+              </div>
+
+              {/* Thumbnails Below Main Image */}
+              <div className="w-full flex justify-center items-center gap-3 flex-wrap mt-2">
+                {product.images.map((img, index) => (
+                  <div
+                    key={index}
+                    className={`rounded-md p-1 cursor-pointer transition duration-200 ${
+                      index === currentIndex
+                        ? "border-pink-500 ring-2 ring-pink-300"
+                        : "ring-pink-300 border hover:border-pink-300"
+                    }`}
+                    onClick={() => setCurrentIndex(index)}
+                  >
+                    <img
+                      src={img}
+                      alt={`thumbnail-${index}`}
+                      className="h-16 w-16 object-contain"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Right Detail Section */}
+            {/* Right Section - Details */}
             <div className="w-full md:w-1/2 flex flex-col gap-4">
-              {/* Product Title */}
-              <h1 className="text-2xl font-semibold text-gray-800">
+              {/* Title */}
+              <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
                 {product.name}
                 {product.altNames.map((alt, i) => (
                   <span key={i} className="text-lg text-gray-500">
@@ -73,34 +77,35 @@ function ProductOverviewPage() {
               </h1>
 
               {/* Description */}
-              <p className="text-gray-700 text-sm mt-2">
+              <p className="text-gray-700 text-sm sm:text-base mt-1">
                 {product.description}
               </p>
 
-              {/* Price Display */}
+              {/* Price */}
               <div className="flex items-center gap-4 mt-2">
-                <p className="text-2xl font-bold text-red-600">
+                <p className="text-xl sm:text-2xl font-bold text-red-600">
                   Rs. {product.price.toFixed(2)}
                 </p>
                 {product.labelledPrice > product.price && (
-                  <p className="text-lg line-through text-gray-500">
+                  <p className="text-sm sm:text-lg line-through text-gray-500">
                     Rs. {product.labelledPrice.toFixed(2)}
                   </p>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4 mt-6">
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
                 <button
-                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md cursor-pointer"
+                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-md"
                   onClick={() => {
                     addToCart(product, 1);
+                    toast.success("Added to cart");
                   }}
                 >
                   ADD TO CART
                 </button>
                 <button
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md cursor-pointer"
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md"
                   onClick={() => {
                     navigate("/checkout", {
                       state: {
@@ -125,6 +130,7 @@ function ProductOverviewPage() {
           </div>
         </div>
       )}
+
       {status === "Loading" && <LoadingAnimation />}
     </>
   );
