@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingAnimation from "../../components/LoadingAnimation";
@@ -26,6 +26,29 @@ function ProductOverviewPage() {
       });
   }, []);
 
+
+  const scrollRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => setIsDragging(false);
+  const handleMouseUp = () => setIsDragging(false);
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5; // scroll speed
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
   return (
     <>
       {status === "Success" && (
@@ -43,11 +66,18 @@ function ProductOverviewPage() {
               </div>
 
               {/* Thumbnails Below Main Image */}
-              <div className="w-full flex justify-center items-center gap-3 flex-wrap mt-2">
+              <div
+                ref={scrollRef}
+                className="w-full flex overflow-x-auto gap-3 mt-2 py-1 px-1 scrollbar-hide cursor-grab active:cursor-grabbing"
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+              >
                 {product.images.map((img, index) => (
                   <div
                     key={index}
-                    className={`rounded-md p-1 cursor-pointer transition duration-200 ${
+                    className={`min-w-[4rem] rounded-md p-1 cursor-pointer transition duration-200 ${
                       index === currentIndex
                         ? "border-pink-500 ring-2 ring-pink-300"
                         : "ring-pink-300 border hover:border-pink-300"

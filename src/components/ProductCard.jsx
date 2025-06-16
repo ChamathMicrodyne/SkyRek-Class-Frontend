@@ -7,12 +7,12 @@ function ProductCard({ product }) {
   return (
     <Link
       to={"/products/overview/" + product.productId}
-      className="w-[300px] bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg m-2 cursor-pointer"
+      className="w-[180px] sm:w-[250px] bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg m-2 cursor-pointer"
     >
       <img
         src={product.images[0]}
         alt={product.name}
-        className="w-full h-full object-cover"
+        className="w-full h-[150px] sm:h-full object-cover"
       />
       <div className="p-4">
         <h2 className="text-lg font-semibold text-gray-900 mb-1 uppercase">

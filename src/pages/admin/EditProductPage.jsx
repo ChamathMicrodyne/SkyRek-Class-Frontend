@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { mediaUploadProducts } from "../../utils/mediaUpload";
+import { mediaUpload } from "../../utils/mediaUpload";
 
 export default function EditProductPage() {
   const location = useLocation();
@@ -36,7 +36,7 @@ export default function EditProductPage() {
     const promisesArray = [];
 
     for (let i = 0; i < images.length; i++) {
-      promisesArray[i] = mediaUploadProducts(images[i]);
+      promisesArray[i] = mediaUpload(images[i]);
     }
     try {
       if (images.length > 0) {

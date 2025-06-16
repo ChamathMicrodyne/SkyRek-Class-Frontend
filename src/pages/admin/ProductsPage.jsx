@@ -86,8 +86,8 @@ function ProductsPage() {
                           className="w-12 h-12 object-cover mx-auto rounded"
                         />
                       </td>
-                      <td className="py-2">₹{product.labelledPrice}</td>
-                      <td className="py-2">₹{product.price}</td>
+                      <td className="py-2">Rs. {product.labelledPrice}</td>
+                      <td className="py-2">Rs. {product.price}</td>
                       <td className="py-2">{product.stock}</td>
                       <td className="py-2">
                         <div className="flex justify-center gap-3">

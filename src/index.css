@@ -8,13 +8,11 @@
     --color-admin-secondary: #dbfce7;
 }
 
-/* Tailwind-compatible custom class */
-.hide-scrollbar::-webkit-scrollbar {
+/* In global CSS */
+.scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
-
-.hide-scrollbar {
-  -ms-overflow-style: none;  /* IE & Edge */
-  scrollbar-width: none;     /* Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
-

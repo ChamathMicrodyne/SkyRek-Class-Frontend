@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { mediaUploadProfile } from "../utils/mediaUpload";
+import { mediaUpload } from "../utils/mediaUpload";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ function SignupPage() {
 
   async function fileUpload() {
     try {
-      const res = await mediaUploadProfile(selectedImageFile);
+      const res = await mediaUpload(selectedImageFile);
       return res;
     } catch (e) {
       console.log(e);

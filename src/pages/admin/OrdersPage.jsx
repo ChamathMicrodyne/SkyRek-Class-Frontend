@@ -123,13 +123,13 @@ function OrdersPage() {
                         {new Date(activeOrder.date).toLocaleDateString()}
                       </p>
                       <p>
-                        <strong>Total:</strong> LKR{" "}
+                        <strong>Total:</strong> Rs.{" "}
                         {activeOrder.total.toLocaleString(undefined, {
                           minimumFractionDigits: 2,
                         })}
                       </p>
                       <p>
-                        <strong>Labelled Total:</strong> LKR{" "}
+                        <strong>Labelled Total:</strong> Rs.{" "}
                         {Number(activeOrder.labelledTotal).toLocaleString(
                           undefined,
                           { minimumFractionDigits: 2 }
@@ -170,14 +170,14 @@ function OrdersPage() {
                           </td>
                           <td className="py-3 px-3">{item.productInfo.name}</td>
                           <td className="py-3 px-3">
-                            LKR{" "}
+                            Rs.{" "}
                             {item.productInfo.price.toLocaleString(undefined, {
                               minimumFractionDigits: 2,
                             })}
                           </td>
                           <td className="py-3 px-3">{item.quantity}</td>
                           <td className="py-3 px-3">
-                            LKR{" "}
+                            Rs.{" "}
                             {(
                               item.productInfo.price * item.quantity
                             ).toLocaleString(undefined, {
@@ -231,7 +231,7 @@ function OrdersPage() {
                       <td className="py-2">{order.address}</td>
                       <td className="py-2">{order.phone}</td>
                       <td className="py-2">
-                        LKR {Number(order.total).toLocaleString()}
+                        Rs. {Number(order.total).toLocaleString()}
                       </td>
                       <td className="py-2">
                         {new Date(order.date).toLocaleDateString()}
