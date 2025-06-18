@@ -12,6 +12,34 @@ import toast from "react-hot-toast";
 
 function AdminPage() {
   
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      toast.error("Please login first");
+      return;
+    }
+
+    axios
+      .get(import.meta.env.VITE_BACKEND_URL + "/api/users/check-admin",  {
+        headers : {
+          "Authorization" : "Bearer " + token
+        }
+      })
+      .then((response) => {
+        if (response.data.role == "admin"){
+          
+        } else {
+          toast.error(response.data.message);
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        navigate("/");
+      });
+  }, []);
 
   return (
     <div className="w-full h-screen flex">
