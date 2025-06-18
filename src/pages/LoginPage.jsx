@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { GrGoogle } from "react-icons/gr";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -20,18 +22,37 @@ function LoginPage() {
         }
       );
       toast.success("Login Successful");
-      console.log(response.data);
       localStorage.setItem("token", response.data.token);
 
       if (response.data.role == "admin") {
-        navigate("/admin")
+        navigate("/admin");
       } else {
-        navigate("/")
+        navigate("/");
       }
     } catch (err) {
       toast.error(err.response.data.message);
     }
   }
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (response) => {
+      const accessToken = response.access_token;
+      axios
+        .post(import.meta.env.VITE_BACKEND_URL + "/api/users/login/google", {
+          accessToken: accessToken,
+        })
+        .then((response) => {
+          toast.success("Login Successful");
+          const token = response.data.token;
+          localStorage.setItem("token", token);
+          if (response.data.role == "admin") {
+            navigate("/admin/");
+          } else {
+            navigate("/");
+          }
+        });
+    },
+  });
 
   return (
     <div className='w-full h-screen bg-[url("/LoginBackground.png")] bg-cover bg-center flex flex-col justify-center items-center'>
@@ -98,6 +119,13 @@ function LoginPage() {
             </svg>
           </div>
 
+          <p
+            className="text-[13px] underline text-blue-500 mt-[-30px] mr-[-220px] mb-[10px] cursor-pointer"
+            onClick={() => {navigate("/forget")}}
+          >
+            Forgot password
+          </p>
+
           <button
             type="submit"
             className="bg-white text-black font-semibold rounded-full w-full py-3 hover:bg-gray-300 transition duration-300"
@@ -106,12 +134,18 @@ function LoginPage() {
             Login
           </button>
 
-          <p className="text-[13px] mt-[-15px] mb-[-20px] cursor-default">
+          <p className="text-[13px] mt-[-15px] mb-4 cursor-default">
             Don't have an account?{" "}
             <Link to="/signup" className="underline">
               Sign up
             </Link>
           </p>
+          <div className="w-full h-[50px] flex items-center justify-center">
+            <GrGoogle
+              className="text-[24px] cursor-pointer"
+              onClick={googleLogin}
+            />
+          </div>
         </div>
       </div>
     </div>

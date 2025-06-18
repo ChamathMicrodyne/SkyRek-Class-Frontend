@@ -70,7 +70,6 @@ function SignupPage() {
         }
       );
       toast.success("Login Successful");
-      console.log(response.data);
       navigate("/login")
     } catch (err) {
       toast.error(err);
