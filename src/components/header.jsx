@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Header() {
+  const location = useLocation();
+  const currentLocation = location.pathname.replace('/','');
   const navigate = useNavigate();
   const [sideDrawerOpened, setSideDrawerOpened] = useState(false);
-  const [active, setActive] = useState(null);
+  const [active, setActive] = useState(currentLocation? currentLocation : "home");
 
   const navLinks = [
     { name: "Home", path: "/", id: "home" },
