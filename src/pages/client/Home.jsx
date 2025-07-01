@@ -8,7 +8,7 @@ function Home() {
     <div className='h-screen flex w-full bg-[linear-gradient(180deg,_#fde1ff,_#e1ffea22_60%)]'>
         <div className="flex-[1] flex flex-col justify-center gap-[20px] pl-[180px] lh-[1.1]">
             <h2 className='text-[#090909] text-[26px] font-bold hidden'>NEW ARRIVALS ONLY</h2>
-            <div>
+            <div className='wrap flex flex-col'>
                 <div className="flex items-center gap-[20px]">
                     <p className='text-[#171717] text-[100px] font-bold uppercase'>New</p>
                     <img src={hand_icon} alt="hand_icon" className='w-[105px]' />
