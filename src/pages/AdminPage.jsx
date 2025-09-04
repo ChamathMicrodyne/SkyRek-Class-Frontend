@@ -18,6 +18,7 @@ function AdminPage() {
     const token = localStorage.getItem("token");
     if (token == null) {
       toast.error("Please login first");
+      navigate("/login")
       return;
     }
 

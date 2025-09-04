@@ -13,6 +13,7 @@ function Header() {
     { name: "Products", path: "/products", id: "products" },
     { name: "About", path: "/about", id: "about" },
     { name: "Contact", path: "/contact", id: "contact" },
+    { name: "Search", path: "/search", id: "search" },
   ];
 
   return (
